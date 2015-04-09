@@ -17,19 +17,29 @@ db=DBClient.new()
 def search_level(captclient, db, sstr)
   depth=5
   servlim=8
-  [*('a'..'z'),' ','-'].reverse.each do |ltr|
+  [*('a'..'z'),'-'].each do |ltr|
     stn=sstr+ltr
     puts stn
-    statns=captclient.query_q(stn)
-    db.addStations(statns)
-    sleep(1)
-    if statns.size>=servlim && stn.size<=depth
-      search_level(captclient,db,stn)
+    
+    if (ku=db.verifykey(stn))>=0
+      puts "Key already used once"
+      if ku>=servlim && stn.size<depth
+	search_level(captclient,db,stn)
+      end
+    else
+      statns=captclient.query_q(stn)
+      db.setkey(stn,statns.size)
+      db.addStations(statns)
+      sleep(1)
+      if statns.size>=servlim && stn.size<depth
+	search_level(captclient,db,stn)
+      end
     end
   end
 end
 
 #Recursive:
+#7163 and counting
 search_level(apc,db,"")
 
 #7143 with three levels

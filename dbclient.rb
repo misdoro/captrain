@@ -6,10 +6,27 @@ class DBClient
       @conn = Mysql.new(dbhost,dbuser,dbpass,dbname)
       @conn.autocommit(false)
       @stmt = @conn.prepare("INSERT IGNORE INTO stations(id,latitude,longitude,name) VALUES(?,?,?,?)")
-      
+      @getkeystmt = @conn.prepare("Select keystr,numsta from usedkeys where keystr=?;")
+      @putkeystmt = @conn.prepare("INSERT IGNORE INTO usedkeys(keystr,numsta) VALUES(?,?)")
     rescue Mysql::Error => e
       puts e
     end
+  end
+  
+  def verifykey(keytxt)
+    haskey=@getkeystmt.execute(keytxt)
+    if haskey.num_rows>0
+      haskey.each do |val|
+	return val[1]
+      end
+    else
+      return -1
+    end
+  end
+  
+  def setkey(keytxt,numsta)
+    @putkeystmt.execute(keytxt,numsta)
+    @conn.commit
   end
   
   def addStations(stations)

@@ -3,3 +3,7 @@ somewhere between Dijon-Lyon 46.946908,4.915362
 
 Get 10 closest stations and distance to them (must be a defined way to do this):
 select *,6371*3.1416/180*sqrt((POW(46.9469-latitude,2)+POW(cos(latitude/180*3.1416)*(4.91536-longitude),2))) from stations order by (POW(46.9469-latitude,2)+POW(cos(latitude/180*3.1416)*(4.91536-longitude),2)) asc limit 10;
+
+github capitainetrain
+
+21462 stations
