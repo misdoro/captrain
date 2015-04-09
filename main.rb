@@ -20,7 +20,9 @@ def search_level(captclient, db, sstr)
   [*('a'..'z'),'-'].each do |ltr|
     stn=sstr+ltr
     puts stn
-    
+    if stn.include?("--")
+      next
+    end
     if (ku=db.verifykey(stn))>=0
       puts "Key already used once"
       if ku>=servlim && stn.size<depth
