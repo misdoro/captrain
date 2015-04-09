@@ -2,6 +2,7 @@ create database captrain;
 grant all on captrain.* to captrain@'localhost' identified by "pctpass";
 flush privileges;
 
+\u captrain
 drop table if exists stations;
 create table stations(
 id int unsigned NOT NULL,
