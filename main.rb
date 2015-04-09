@@ -20,10 +20,17 @@ db=DBClient.new()
     stn=l1+l2
     print stn+"\n"
     statns=apc.query_q(stn)
-    #print statns
     db.addStations(statns)
-
-    sleep(2)
+    if statns.size>=8
+      ('a'..'z').each do |l3|
+	statns=apc.query_q(stn+l3)
+	 db.addStations(statns)
+	 puts "third loop"
+	 puts statns.inspect
+      end
+    end
+    #print statn
+    sleep(1)
   end
 end
 
